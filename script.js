@@ -1,4 +1,4 @@
-const API_BASE = "https://study-login-backend.onrender.com";
+const API_BASE = "https://login-page-backend-8l6d.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("signupForm").addEventListener("submit", function (e) {
