@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Main</title>
+</head>
+
+<body>
+    <h1 id="welcome"></h1>
+    <p>이 페이지는 로그인 후에만 접근할 수 있습니다.</p>
+    <button id="logoutBtn">로그아웃</button>
+
+    <script>
+        const token = localStorage.getItem("token");
+        const name = localStorage.getItem("name");
+
+        // 로그인 안 되어 있으면 튕김
+        if (!token || !name) {
+            alert("로그인이 필요합니다.");
+            window.location.href = "index.html";
+        } else {
+            document.getElementById("welcome").textContent = `환영합니다, ${name}님! 🎉`;
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.clear();
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+
+</html>
