@@ -15,12 +15,11 @@
         const token = localStorage.getItem("token");
         const name = localStorage.getItem("name");
 
-        // 로그인 안 되어 있으면 튕김
         if (!token || !name) {
             alert("로그인이 필요합니다.");
             window.location.href = "index.html";
         } else {
-            document.getElementById("welcome").textContent = `환영합니다, ${name}님! 🎉`;
+            document.getElementById("welcome").textContent = `하잉, ${name}님!`;
         }
 
         document.getElementById("logoutBtn").addEventListener("click", () => {
