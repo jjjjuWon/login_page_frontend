@@ -1,4 +1,4 @@
-const API_BASE = "https://study_login_page.onrender.com"; // ← Render에 배포된 주소로 수정
+const API_BASE = "https://study-login-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("signupForm").addEventListener("submit", function (e) {
