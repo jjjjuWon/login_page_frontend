@@ -185,15 +185,14 @@
 
         // Socket.IO 연결 (배포용)
         // 1. transports 옵션 없이 (자동 fallback)
-        const socket = io("https://login-page-backend-8ld6.onrender.com", {
-            secure: true
-        });
-
-        // 2. polling만 강제
         // const socket = io("https://login-page-backend-8ld6.onrender.com", {
-        //     transports: ['polling'],
         //     secure: true
         // });
+
+        const socket = io("https://login-page-backend-8ld6.onrender.com", {
+            transports: ['polling'],
+            secure: true
+        });
 
         // 연결 상태 확인용 로그
         socket.on("connect", () => {
