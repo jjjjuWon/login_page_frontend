@@ -189,11 +189,20 @@
             secure: true
         });
 
+        // 연결 상태 확인용 로그
+        socket.on("connect", () => {
+            console.log("소켓 연결 성공!", socket.id);
+        });
+        socket.on("connect_error", (err) => {
+            console.error("소켓 연결 에러:", err);
+        });
+
         // 사용자 로그인 처리
         socket.emit("user_login", { name });
 
         // 채팅방 목록 업데이트
         socket.on("room_list", (rooms) => {
+            console.log("room_list 수신:", rooms);
             const roomsDiv = document.getElementById("rooms");
             roomsDiv.innerHTML = rooms
                 .map(room => `
@@ -208,6 +217,7 @@
 
         // 온라인 사용자 목록 업데이트
         socket.on("user_list", (users) => {
+            console.log("user_list 수신:", users);
             const onlineUsersDiv = document.getElementById("onlineUsers");
             onlineUsersDiv.innerHTML = users
                 .map(user => `<div class="online-user">${user.name}</div>`)
@@ -216,6 +226,7 @@
 
         // 메시지 수신
         socket.on("receive_message", (messageData) => {
+            console.log("메시지 수신:", messageData);
             const chat = document.getElementById("chat");
             const messageDiv = document.createElement("div");
             messageDiv.className = "message";
@@ -236,6 +247,7 @@
             document.getElementById("currentRoom").textContent = `현재 채팅방: ${roomId}`;
             document.getElementById("chat").innerHTML = ""; // 채팅 내용 초기화
         }
+        window.joinRoom = joinRoom; // 반드시 필요!
 
         // 새 채팅방 만들기
         document.getElementById("createRoomBtn").addEventListener("click", () => {
@@ -249,7 +261,6 @@
         document.getElementById("sendBtn").addEventListener("click", () => {
             const input = document.getElementById("messageInput");
             const message = input.value.trim();
-            
             if (message) {
                 socket.emit("send_message", {
                     sender: name,
