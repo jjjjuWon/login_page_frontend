@@ -5,22 +5,30 @@
     <meta charset="UTF-8" />
     <title>Main</title>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
         body {
             font-family: Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f5f5f5;
         }
 
         .container {
             display: flex;
             gap: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
         }
 
         .sidebar {
             width: 250px;
             flex-shrink: 0;
+            border-right: 1px solid #eee;
+            padding-right: 20px;
         }
 
         .main-content {
@@ -33,7 +41,7 @@
         }
 
         #chat {
-            border: 1px solid #ccc;
+            border: 1px solid #eee;
             border-radius: 8px;
             padding: 15px;
             height: 400px;
@@ -46,57 +54,78 @@
             margin: 8px 0;
             padding: 8px;
             border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+            max-width: 70%;
+        }
+
+        .message.received {
+            background-color: white;
+            margin-right: auto;
+            border: 1px solid #e0e0e0;
+        }
+
+        .message.sent {
+            background-color: #fee500;
+            margin-left: auto;
         }
 
         .message .sender {
             font-weight: bold;
             color: #2c3e50;
+            margin-bottom: 4px;
         }
 
         .message .time {
-            font-size: 0.8em;
+            font-size: 0.7em;
             color: #7f8c8d;
             margin-left: 8px;
         }
 
+        .message .content {
+            word-break: break-word;
+        }
+
         #messageInput {
             width: calc(100% - 100px);
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
             margin-right: 10px;
+            font-size: 14px;
         }
 
         #sendBtn {
-            padding: 8px 20px;
-            background-color: #3498db;
-            color: white;
+            padding: 12px 24px;
+            background-color: #fee500;
+            color: #3c1e1e;
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
             cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
         }
 
         #sendBtn:hover {
-            background-color: #2980b9;
+            background-color: #f4dc00;
         }
 
         #userList, #roomList {
             margin-top: 20px;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #eee;
             border-radius: 8px;
-            background-color: #f9f9f9;
+            background-color: white;
         }
 
         .online-user, .room-item {
-            padding: 8px;
+            padding: 10px;
             margin: 5px 0;
-            background-color: #fff;
-            border-radius: 4px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
         }
 
         .online-user:hover, .room-item:hover {
@@ -104,39 +133,76 @@
         }
 
         .room-item.active {
-            background-color: #3498db;
-            color: white;
+            background-color: #fee500;
+            color: #3c1e1e;
         }
 
         .room-item .user-count {
-            float: right;
+            margin-left: auto;
             font-size: 0.8em;
             color: #7f8c8d;
+            background-color: #eee;
+            padding: 2px 8px;
+            border-radius: 10px;
         }
 
         .room-item.active .user-count {
-            color: #fff;
+            background-color: #3c1e1e;
+            color: white;
         }
 
         #createRoomBtn {
             width: 100%;
-            padding: 8px;
+            padding: 12px;
             margin-top: 10px;
-            background-color: #2ecc71;
-            color: white;
+            background-color: #fee500;
+            color: #3c1e1e;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
         }
 
         #createRoomBtn:hover {
-            background-color: #27ae60;
+            background-color: #f4dc00;
         }
 
         .current-room {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: bold;
-            color: #2c3e50;
+            color: #3c1e1e;
+            padding: 10px;
+            background-color: #fee500;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fee500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: #3c1e1e;
+            font-weight: bold;
+        }
+
+        .message-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .message-container.sent {
+            flex-direction: row-reverse;
+        }
+
+        .message-container .user-avatar {
+            margin: 0 10px;
         }
     </style>
 </head>
@@ -144,7 +210,7 @@
 <body>
     <h1 id="welcome"></h1>
     <p>이 페이지는 로그인 후에만 접근할 수 있습니다.</p>
-    <button id="logoutBtn">로그아웃</button>
+    <button id="logoutBtn" style="background-color: #fee500; color: #3c1e1e; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">로그아웃</button>
 
     <div id="chatContainer">
         <div class="container">
@@ -183,12 +249,6 @@
             document.getElementById("chatContainer").style.display = "block";
         }
 
-        // Socket.IO 연결 (배포용)
-        // 1. transports 옵션 없이 (자동 fallback)
-        // const socket = io("https://login-page-backend-8ld6.onrender.com", {
-        //     secure: true
-        // });
-
         const socket = io("https://backend-solitary-sun-4121.fly.dev", {
             secure: true
         });
@@ -212,6 +272,7 @@
                 .map(room => `
                     <div class="room-item ${room.id === currentRoomId ? 'active' : ''}" 
                          onclick="joinRoom('${room.id}')">
+                        <div class="user-avatar">${room.name.charAt(0).toUpperCase()}</div>
                         ${room.name}
                         <span class="user-count">${room.userCount}명</span>
                     </div>
@@ -224,7 +285,12 @@
             console.log("user_list 수신:", users);
             const onlineUsersDiv = document.getElementById("onlineUsers");
             onlineUsersDiv.innerHTML = users
-                .map(user => `<div class="online-user">${user.name}</div>`)
+                .map(user => `
+                    <div class="online-user">
+                        <div class="user-avatar">${user.name.charAt(0).toUpperCase()}</div>
+                        ${user.name}
+                    </div>
+                `)
                 .join("");
         });
 
@@ -232,15 +298,25 @@
         socket.on("receive_message", (messageData) => {
             console.log("메시지 수신:", messageData);
             const chat = document.getElementById("chat");
+            const messageContainer = document.createElement("div");
+            messageContainer.className = `message-container ${messageData.sender === name ? 'sent' : 'received'}`;
+            
+            const avatar = document.createElement("div");
+            avatar.className = "user-avatar";
+            avatar.textContent = messageData.sender.charAt(0).toUpperCase();
+            
             const messageDiv = document.createElement("div");
-            messageDiv.className = "message";
+            messageDiv.className = `message ${messageData.sender === name ? 'sent' : 'received'}`;
             const time = new Date(messageData.timestamp).toLocaleTimeString();
             messageDiv.innerHTML = `
-                <span class="sender">${messageData.sender}:</span>
+                <span class="sender">${messageData.sender}</span>
                 <span class="time">${time}</span>
-                <div>${messageData.message}</div>
+                <div class="content">${messageData.message}</div>
             `;
-            chat.appendChild(messageDiv);
+            
+            messageContainer.appendChild(avatar);
+            messageContainer.appendChild(messageDiv);
+            chat.appendChild(messageContainer);
             chat.scrollTop = chat.scrollHeight;
         });
 
