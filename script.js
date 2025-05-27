@@ -1,4 +1,4 @@
-const API_BASE = "https://login-page-backend-8l6d.onrender.com";
+const API_BASE = "https://login-page-backend.fly.dev";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("signupForm").addEventListener("submit", function (e) {
