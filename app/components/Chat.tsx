@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
-import type { Socket } from 'socket.io-client';
+import io, { Socket as SocketType } from 'socket.io-client';
 
 interface ChatProps {
   username: string;
@@ -17,7 +16,7 @@ interface Message {
 export default function Chat({ username }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<SocketType | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
