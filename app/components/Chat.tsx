@@ -36,24 +36,28 @@ export default function Chat({ username }: ChatProps) {
 
   useEffect(() => {
     const newSocket = io('https://backend-solitary-sun-4121.fly.dev', {
-      secure: true
+      secure: true,
     });
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
       console.log('소켓 연결 성공!', newSocket.id);
       newSocket.emit('user_login', { name: username });
+      newSocket.emit('join_room', 'general');
     });
 
     newSocket.on('room_list', (roomList: Room[]) => {
+      console.log('room_list:', roomList); 
       setRooms(roomList);
     });
 
     newSocket.on('user_list', (users: UserData[]) => {
+      console.log('user_list:', users); 
       setOnlineUsers(users);
     });
 
     newSocket.on('receive_message', (message: Message) => {
+      console.log('receive_message:', message); 
       setMessages(prev => [...prev, message]);
     });
 

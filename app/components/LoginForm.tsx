@@ -12,8 +12,19 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 실제 구현에서는 여기서 서버에 인증 요청을 보내야 합니다
-    onLogin(username);
+
+    // 예시용 인증 로직 (id: admin, pw: admin 이면 어드민으로 간주)
+    if (username === 'admin' && password === 'admin') {
+      localStorage.setItem('token', 'admin-token'); // 실제에선 JWT 같은 걸 받아야 함
+      localStorage.setItem('name', '관리자');
+      onLogin('관리자');
+    } else if (username && password) {
+      localStorage.setItem('token', 'user-token'); // 임시 토큰......
+      localStorage.setItem('name', username);
+      onLogin(username);
+    } else {
+      alert('아이디와 비밀번호를 입력해주세요.');
+    }
   };
 
   return (

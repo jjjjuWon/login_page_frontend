@@ -9,19 +9,25 @@ export default function ChatPage() {
   const [username, setUsername] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const name = localStorage.getItem('name');
-    
-    if (!token || !name) {
-      alert('로그인이 필요합니다.');
-      router.push('/');
-    } else {
-      setUsername(name);
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      const name = localStorage.getItem('name');
+
+      if (!token || !name) {
+        alert('로그인이 필요합니다.');
+        router.replace('/');
+      } else {
+        setUsername(name);
+      }
     }
   }, [router]);
 
   if (!username) {
-    return null; // 로딩 중이거나 인증되지 않은 경우
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-500">
+        인증 확인 중...
+      </div>
+    );
   }
 
   return (
@@ -32,7 +38,7 @@ export default function ChatPage() {
           <button
             onClick={() => {
               localStorage.clear();
-              router.push('/');
+              router.replace('/');
             }}
             className="bg-[#fee500] text-[#3c1e1e] px-5 py-2.5 rounded-lg border-none cursor-pointer"
           >
@@ -43,4 +49,4 @@ export default function ChatPage() {
       </div>
     </div>
   );
-} 
+}
