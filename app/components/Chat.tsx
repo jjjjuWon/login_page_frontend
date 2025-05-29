@@ -17,7 +17,7 @@ interface Message {
 export default function Chat({ username }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -94,4 +94,4 @@ export default function Chat({ username }: ChatProps) {
       </form>
     </div>
   );
-} 
+}
