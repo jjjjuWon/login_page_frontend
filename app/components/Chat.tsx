@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-import type { Socket as SocketType } from 'socket.io-client';
 
 interface ChatProps {
   username: string;

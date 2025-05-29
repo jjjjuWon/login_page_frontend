@@ -1,7 +1,7 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import React from 'react'; 
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Chat App',
   description: 'Real-time chat application',
 }
@@ -19,13 +19,7 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
         />
       </head>
-      <body>
-        <div className="wrapper">
-          <div className="container">
-            {children}
-          </div>
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
