@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { io as socketIO, Socket } from 'socket.io-client';
+import io from 'socket.io-client';
+import type { Socket } from 'socket.io-client';
 
 interface ChatProps {
   username: string;
@@ -20,7 +21,7 @@ export default function Chat({ username }: ChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const newSocket = socketIO('http://localhost:3001');
+    const newSocket = io('http://localhost:3001');
     setSocket(newSocket);
 
     newSocket.on('message', (message: Message) => {
