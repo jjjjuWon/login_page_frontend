@@ -5,7 +5,7 @@ import { MessageData, Room, UserData } from './types';
 const token = localStorage.getItem("token");
 const name = localStorage.getItem("name");
 let currentRoomId = "general";
-let socket: typeof Socket;
+let socket: Socket;
 
 if (!token || !name) {
   alert("로그인이 필요합니다.");
@@ -133,4 +133,4 @@ document.getElementById("logoutBtn")!.addEventListener("click", () => {
   socket.disconnect();
   localStorage.clear();
   window.location.href = "index.html";
-}); 
+});
