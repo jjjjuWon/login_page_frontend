@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Chat from '../components/Chat';
 
 export default function ChatPage() {
   const router = useRouter();
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -14,14 +15,20 @@ export default function ChatPage() {
     if (!token || !name) {
       alert('로그인이 필요합니다.');
       router.push('/');
+    } else {
+      setUsername(name);
     }
   }, [router]);
+
+  if (!username) {
+    return null; // 로딩 중이거나 인증되지 않은 경우
+  }
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] p-5">
       <div className="max-w-[1200px] mx-auto">
         <div className="flex justify-between items-center mb-5">
-          <h1 id="welcome" className="text-2xl font-bold"></h1>
+          <h1 className="text-2xl font-bold">환영합니다, {username}님!</h1>
           <button
             onClick={() => {
               localStorage.clear();
@@ -32,7 +39,7 @@ export default function ChatPage() {
             로그아웃
           </button>
         </div>
-        <Chat username={localStorage.getItem('name') || ''} />
+        <Chat username={username} />
       </div>
     </div>
   );
