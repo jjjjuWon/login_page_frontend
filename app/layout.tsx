@@ -1,8 +1,5 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Chat App',
@@ -22,7 +19,13 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <div className="wrapper">
+          <div className="container">
+            {children}
+          </div>
+        </div>
+      </body>
     </html>
   )
-} 
+}
