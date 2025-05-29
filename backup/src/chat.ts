@@ -1,5 +1,5 @@
-import { Socket } from 'socket.io-client';
 import io from 'socket.io-client';
+import type { Socket } from 'socket.io-client';
 import { MessageData, Room, UserData } from './types';
 
 const token = localStorage.getItem("token");
