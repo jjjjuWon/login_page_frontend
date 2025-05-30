@@ -165,13 +165,16 @@ export default function Chat({ username }: ChatProps) {
           <div ref={messagesEndRef} />
       </div>
         <form onSubmit={sendMessage} className={styles.formWrapper}>
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            className={styles.messageInput}
-          />
-          <button type="submit" className={styles.sendBtn}>보내기</button>
+          <div className={styles.inputRow}>
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              className={styles.messageInput}
+              placeholder="메시지를 입력하세요"
+            />
+            <button type="submit" className={styles.sendBtn}>보내기</button>
+          </div>
         </form>
       </div>
     </div>
