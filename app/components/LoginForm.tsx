@@ -7,12 +7,14 @@ interface LoginFormProps {
   onLogin: (username: string) => void;
 }
 
+const API_BASE = 'https://backend-solitary-sun-4121.fly.dev';
+
 export default function LoginForm({ onLogin }: LoginFormProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!username || !password) {
@@ -20,31 +22,27 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       return;
     }
 
-    if (username === 'admin' && password === 'admin') {
-      localStorage.setItem('token', 'admin-token');
-      localStorage.setItem('name', '관리자');
-      alert('👑 관리자 로그인 성공!');
-      onLogin('관리자');
-      router.push('/chat');
-    } else {
-      // 회원가입처럼 처리 (임시 토큰 발급)
-      const isNewUser = !localStorage.getItem(`user-${username}`);
-      if (isNewUser) {
-        alert('회원가입 완료! 자동 로그인합니다.');
-        localStorage.setItem(`user-${username}`, password);
-      } else {
-        const storedPw = localStorage.getItem(`user-${username}`);
-        if (storedPw !== password) {
-          alert('비밀번호가 일치하지 않습니다.');
-          return;
-        }
-      }
+    try {
+      const res = await fetch(`${API_BASE}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: username, pw: password }),
+      });
 
-      localStorage.setItem('token', 'user-token');
-      localStorage.setItem('name', username);
-      alert('로그인 성공!');
-      onLogin(username);
-      router.push('/chat');
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        alert(data.message || '로그인 성공!');
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('name', data.name || username);
+        onLogin(data.name || username);
+        router.push('/chat');
+      } else {
+        alert(data.message || '로그인 실패');
+      }
+    } catch (err) {
+      console.error('로그인 요청 실패:', err);
+      alert('서버 오류 또는 네트워크 문제입니다.');
     }
   };
 
@@ -52,7 +50,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-          Username
+          Username (Email)
         </label>
         <input
           type="text"
@@ -80,7 +78,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         type="submit"
         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        Sign in
+        로그인
       </button>
     </form>
   );
