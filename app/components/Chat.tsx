@@ -37,26 +37,33 @@ export default function Chat({ username }: ChatProps) {
     const newSocket = io('https://backend-solitary-sun-4121.fly.dev', {
       secure: true,
     });
+
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
       console.log('소켓 연결 성공!', newSocket.id);
       newSocket.emit('user_login', { name: username });
       newSocket.emit('join_room', 'general');
+      alert('로그인 완료되었습니다.');
+    });
+
+    newSocket.on('connect_error', (err) => {
+      console.error('소켓 연결 실패:', err);
+      alert('서버와 연결할 수 없습니다. 나중에 다시 시도해주세요.');
     });
 
     newSocket.on('room_list', (roomList: Room[]) => {
-      console.log('room_list:', roomList); 
+      console.log('room_list:', roomList);
       setRooms(roomList);
     });
 
     newSocket.on('user_list', (users: UserData[]) => {
-      console.log('user_list:', users); 
+      console.log('user_list:', users);
       setOnlineUsers(users);
     });
 
     newSocket.on('receive_message', (message: Message) => {
-      console.log('receive_message:', message); 
+      console.log('receive_message:', message);
       setMessages(prev => [...prev, message]);
     });
 
@@ -74,6 +81,7 @@ export default function Chat({ username }: ChatProps) {
       setCurrentRoom(roomId);
       socket.emit('join_room', roomId);
       setMessages([]);
+      alert(`채팅방 "${roomId}"에 입장했습니다.`);
     }
   };
 
