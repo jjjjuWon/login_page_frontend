@@ -15,9 +15,10 @@
 }
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  margin: 0 auto;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom,
       transparent,
