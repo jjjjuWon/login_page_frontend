@@ -113,11 +113,11 @@ export default function Chat({ username }: ChatProps) {
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
-        <button onClick={logout} style={{ marginBottom: '10px' }}>로그아웃</button>
-
+        <button className={styles.fullWidthButton} onClick={logout}>로그아웃</button>
+        
         <div id="roomList">
           <h3>채팅방 목록</h3>
-          <button id="createRoomBtn" onClick={createRoom}>새 채팅방 만들기</button>
+          <button id="createRoomBtn" className={styles.fullWidthButton} onClick={createRoom}>새 채팅방 만들기</button>
           <div>
             {rooms.map(room => (
               <div
@@ -149,19 +149,32 @@ export default function Chat({ username }: ChatProps) {
       <div className={styles['main-content']}>
         <div className={styles['current-room']}>현재 채팅방: {currentRoom}</div>
         <div id="chat" className={styles.chatBox}>
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`${styles['message-container']} ${message.sender === username ? styles.sent : styles.received}`}
-            >
-              <div className={styles['user-avatar']}>{message.sender.charAt(0).toUpperCase()}</div>
-              <div className={`${styles.message} ${message.sender === username ? styles.sent : styles.received}`}>
-                <span className={styles.sender}>{message.sender}</span>
-                <span className={styles.time}>{new Date(message.timestamp!).toLocaleTimeString()}</span>
-                <div className={styles.content}>{message.message}</div>
+          {messages.map((message, index) => {
+            const isMine = message.sender === username;
+            const formattedTime = new Date(message.timestamp!).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit'
+            });
+
+            return (
+              <div
+                key={index}
+                className={`${styles['message-container']} ${isMine ? styles.sent : styles.received}`}
+              >
+                <div className={styles['user-avatar']}>
+                  {message.sender.charAt(0).toUpperCase()}
+                </div>
+                <div className={`${styles.message} ${isMine ? styles.sent : styles.received}`}>
+                  <div className={styles.meta}>
+                    <span>{message.sender}</span>
+                    <span className={styles.time}>{formattedTime}</span>
+                  </div>
+                  <div className={styles.content}>{message.message}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           <div ref={messagesEndRef} />
       </div>
         <form onSubmit={sendMessage} className={styles.formWrapper}>
