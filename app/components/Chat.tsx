@@ -102,97 +102,65 @@ export default function Chat({ username }: ChatProps) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 p-4 max-w-screen-xl mx-auto">
-      {/* Sidebar */}
-      <div className="w-72 flex-shrink-0 border-r border-gray-300 bg-white rounded-lg shadow-md p-4 flex flex-col">
-        <div>
-          <h2 className="text-lg font-bold mb-2">채팅방 목록</h2>
-          <button
-            onClick={createRoom}
-            className="w-full mb-4 px-4 py-2 bg-yellow-300 text-[#3c1e1e] rounded-lg font-semibold hover:bg-yellow-400"
-          >
-            + 새 채팅방
-          </button>
-          <div className="space-y-2">
+    <div className="container">
+      <div className="sidebar">
+        <div id="roomList">
+          <h3>채팅방 목록</h3>
+          <button id="createRoomBtn" onClick={createRoom}>새 채팅방 만들기</button>
+          <div>
             {rooms.map(room => (
               <div
                 key={room.id}
+                className={`room-item ${room.id === currentRoom ? 'active' : ''}`}
                 onClick={() => joinRoom(room.id)}
-                className={`flex items-center px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition ${
-                  room.id === currentRoom ? 'bg-yellow-300 text-[#3c1e1e]' : ''
-                }`}
               >
-                <div className="w-8 h-8 bg-yellow-300 text-[#3c1e1e] rounded-full flex items-center justify-center mr-2 font-bold">
-                  {room.name.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex-1 font-medium">{room.name}</div>
-                <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">{room.userCount}명</span>
+                <div className="user-avatar">{room.name.charAt(0).toUpperCase()}</div>
+                {room.name}
+                <span className="user-count">{room.userCount}명</span>
               </div>
             ))}
           </div>
         </div>
-        <div className="mt-6">
-          <h3 className="font-bold mb-2">현재 사용자</h3>
-          <div className="space-y-2">
+        <div id="userList">
+          <h3>현재 채팅방 사용자</h3>
+          <div>
             {onlineUsers.map(user => (
-              <div key={user.name} className="flex items-center">
-                <div className="w-8 h-8 bg-yellow-300 text-[#3c1e1e] rounded-full flex items-center justify-center mr-2 font-bold">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <div>{user.name}</div>
+              <div key={user.name} className="online-user">
+                <div className="user-avatar">{user.name.charAt(0).toUpperCase()}</div>
+                {user.name}
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Chat content */}
-      <div className="flex-1 flex flex-col ml-4">
-        <div className="p-4 bg-yellow-300 text-[#3c1e1e] font-bold rounded-lg text-center mb-2">
-          현재 채팅방: {currentRoom}
-        </div>
-        <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-50 rounded-lg">
+      <div className="main-content">
+        <div className="current-room">현재 채팅방: {currentRoom}</div>
+        <div id="chat">
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex ${
-                message.sender === username ? 'justify-end' : 'justify-start'
-              }`}
+              className={`message-container ${message.sender === username ? 'sent' : 'received'}`}
             >
-              <div className={`flex items-start gap-2 ${
-                message.sender === username ? 'flex-row-reverse' : 'flex-row'
-              }`}>
-                <div className="w-10 h-10 bg-yellow-300 text-[#3c1e1e] rounded-full flex justify-center items-center font-bold">
-                  {message.sender.charAt(0).toUpperCase()}
-                </div>
-                <div className={`max-w-[70%] p-3 rounded-lg ${
-                  message.sender === username ? 'bg-yellow-300 text-[#3c1e1e]' : 'bg-white border'
-                }`}>
-                  <div className="font-bold">{message.sender}</div>
-                  <div className="break-words">{message.message}</div>
-                  <div className="text-xs text-gray-500">{new Date(message.timestamp!).toLocaleTimeString()}</div>
-                </div>
+              <div className="user-avatar">{message.sender.charAt(0).toUpperCase()}</div>
+              <div className={`message ${message.sender === username ? 'sent' : 'received'}`}>
+                <span className="sender">{message.sender}</span>
+                <span className="time">{new Date(message.timestamp!).toLocaleTimeString()}</span>
+                <div className="content">{message.message}</div>
               </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <form onSubmit={sendMessage} className="mt-2">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-300"
-              placeholder="메시지를 입력하세요..."
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 bg-yellow-300 text-[#3c1e1e] font-bold rounded-full hover:bg-yellow-400"
-            >
-              보내기
-            </button>
-          </div>
+        <form onSubmit={sendMessage} style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            id="messageInput"
+            placeholder="메시지를 입력하세요"
+          />
+          <button type="submit" id="sendBtn">보내기</button>
         </form>
       </div>
     </div>
