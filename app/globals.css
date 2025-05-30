@@ -321,3 +321,10 @@ form input {
 form button {
   white-space: nowrap;
 }
+
+.formWrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
