@@ -81,6 +81,13 @@ export default function LoginPage() {
             <input type="email" placeholder="Email" id="signupEmail" required />
             <input type="password" placeholder="Password" id="signupPassword" required />
             <button className="form_btn" type="submit">Sign Up</button>
+            <button 
+              className="form_btn mt-4" 
+              type="button" 
+              onClick={() => setIsSignUp(false)}
+            >
+              Already have an account? Sign In
+            </button>
           </form>
         </div>
 
@@ -97,11 +104,18 @@ export default function LoginPage() {
             <input type="email" placeholder="Email" id="signinEmail" required />
             <input type="password" placeholder="Password" id="signinPassword" required />
             <button className="form_btn" type="submit">Sign In</button>
+            <button 
+              className="form_btn mt-4" 
+              type="button" 
+              onClick={() => setIsSignUp(true)}
+            >
+              Don't have an account? Sign Up
+            </button>
           </form>
         </div>
 
-        {/* Overlay */}
-        <div className="overlay-container">
+        {/* Overlay - Desktop only */}
+        <div className="overlay-container hidden md:block">
           <div className="overlay-left">
             <h1>Welcome Back</h1>
             <p>To keep connected with us please login with your personal info</p>
