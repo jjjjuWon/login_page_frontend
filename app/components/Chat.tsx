@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
+import styles from './chat.module.css';
+import { useRouter } from 'next/navigation';
 
 interface ChatProps {
   username: string;
@@ -32,6 +34,7 @@ export default function Chat({ username }: ChatProps) {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<UserData[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const newSocket = io('https://backend-solitary-sun-4121.fly.dev', {
@@ -101,9 +104,17 @@ export default function Chat({ username }: ChatProps) {
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    router.push('/');
+  };
+
   return (
-    <div className="container">
-      <div className="sidebar">
+    <div className={styles.container}>
+      <div className={styles.sidebar}>
+        <button onClick={logout} style={{ marginBottom: '10px' }}>로그아웃</button>
+
         <div id="roomList">
           <h3>채팅방 목록</h3>
           <button id="createRoomBtn" onClick={createRoom}>새 채팅방 만들기</button>
@@ -111,22 +122,23 @@ export default function Chat({ username }: ChatProps) {
             {rooms.map(room => (
               <div
                 key={room.id}
-                className={`room-item ${room.id === currentRoom ? 'active' : ''}`}
+                className={`${styles['room-item']} ${room.id === currentRoom ? styles.active : ''}`}
                 onClick={() => joinRoom(room.id)}
               >
-                <div className="user-avatar">{room.name.charAt(0).toUpperCase()}</div>
+                <div className={styles['user-avatar']}>{room.name.charAt(0).toUpperCase()}</div>
                 {room.name}
-                <span className="user-count">{room.userCount}명</span>
+                <span className={styles['user-count']}>{room.userCount}명</span>
               </div>
             ))}
           </div>
         </div>
+
         <div id="userList">
           <h3>현재 채팅방 사용자</h3>
           <div>
             {onlineUsers.map(user => (
-              <div key={user.name} className="online-user">
-                <div className="user-avatar">{user.name.charAt(0).toUpperCase()}</div>
+              <div key={user.name} className={styles['online-user']}>
+                <div className={styles['user-avatar']}>{user.name.charAt(0).toUpperCase()}</div>
                 {user.name}
               </div>
             ))}
@@ -134,24 +146,25 @@ export default function Chat({ username }: ChatProps) {
         </div>
       </div>
 
-      <div className="main-content">
-        <div className="current-room">현재 채팅방: {currentRoom}</div>
-        <div id="chat">
+      <div className={styles['main-content']}>
+        <div className={styles['current-room']}>현재 채팅방: {currentRoom}</div>
+        <div id="chat" className={styles.chatBox}>
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`message-container ${message.sender === username ? 'sent' : 'received'}`}
+              className={`${styles['message-container']} ${message.sender === username ? styles.sent : styles.received}`}
             >
-              <div className="user-avatar">{message.sender.charAt(0).toUpperCase()}</div>
-              <div className={`message ${message.sender === username ? 'sent' : 'received'}`}>
-                <span className="sender">{message.sender}</span>
-                <span className="time">{new Date(message.timestamp!).toLocaleTimeString()}</span>
-                <div className="content">{message.message}</div>
+              <div className={styles['user-avatar']}>{message.sender.charAt(0).toUpperCase()}</div>
+              <div className={`${styles.message} ${message.sender === username ? styles.sent : styles.received}`}>
+                <span className={styles.sender}>{message.sender}</span>
+                <span className={styles.time}>{new Date(message.timestamp!).toLocaleTimeString()}</span>
+                <div className={styles.content}>{message.message}</div>
               </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
+
         <form onSubmit={sendMessage} style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
           <input
             type="text"
@@ -159,8 +172,9 @@ export default function Chat({ username }: ChatProps) {
             onChange={(e) => setNewMessage(e.target.value)}
             id="messageInput"
             placeholder="메시지를 입력하세요"
+            className={styles.messageInput}
           />
-          <button type="submit" id="sendBtn">보내기</button>
+          <button type="submit" id="sendBtn" className={styles.sendBtn}>보내기</button>
         </form>
       </div>
     </div>
