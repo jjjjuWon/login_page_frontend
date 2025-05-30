@@ -303,3 +303,21 @@ span {
 .message-container .user-avatar {
   margin: 0 10px;
 }
+
+form {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+form input {
+  flex: 1;
+  width: auto !important;
+  min-width: 0;
+}
+
+form button {
+  white-space: nowrap;
+}
