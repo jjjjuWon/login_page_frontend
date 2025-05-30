@@ -16,8 +16,6 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('✅ handleSubmit 실행됨');
-
     if (!username || !password) {
       alert('아이디와 비밀번호를 입력해주세요.');
       return;
@@ -30,9 +28,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         body: JSON.stringify({ email: username, pw: password }),
       });
 
-      console.log('📨 응답 상태:', res.status);
       const data = await res.json();
-      console.log('📨 응답 데이터:', data);
       
       if (res.ok && data.token) {
         alert(data.message || '로그인 성공!');
