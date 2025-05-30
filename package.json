@@ -2,9 +2,10 @@
   "name": "login-page-frontend",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc",
-    "dev": "vite",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "^15.3.3",
@@ -13,13 +14,15 @@
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.8",
     "@types/json5": "^0.0.30",
-    "@types/next": "^8.0.7",
     "@types/node": "^20.11.24",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "@types/socket.io-client": "^1.4.36",
-    "typescript": "^5.3.3",
-    "vite": "^5.1.4"
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.3.3"
   }
 }
