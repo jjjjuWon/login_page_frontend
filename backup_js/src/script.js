@@ -1,19 +1,11 @@
-import { User, LoginResponse } from './types';
-
 const API_BASE = "https://backend-solitary-sun-4121.fly.dev";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const signupForm = document.getElementById("signupForm") as HTMLFormElement;
-  const signinForm = document.getElementById("signinForm") as HTMLFormElement;
-  const signUpBtn = document.getElementById("signUp") as HTMLButtonElement;
-  const signInBtn = document.getElementById("signIn") as HTMLButtonElement;
-  const container = document.querySelector(".container") as HTMLDivElement;
-
-  signupForm.addEventListener("submit", function (e: Event) {
+  document.getElementById("signupForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    const name = (document.getElementById("signupName") as HTMLInputElement).value;
-    const email = (document.getElementById("signupEmail") as HTMLInputElement).value;
-    const pw = (document.getElementById("signupPassword") as HTMLInputElement).value;
+    const name = document.getElementById("signupName").value;
+    const email = document.getElementById("signupEmail").value;
+    const pw = document.getElementById("signupPassword").value;
 
     console.log("회원가입 시도:", { name, email });
 
@@ -26,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("회원가입 응답 상태:", res.status);
         return res.json();
       })
-      .then((data: LoginResponse) => {
+      .then((data) => {
         console.log("회원가입 응답 데이터:", data);
         alert(data.message);
       })
@@ -36,10 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  signinForm.addEventListener("submit", function (e: Event) {
+  document.getElementById("signinForm").addEventListener("submit", function (e) {
     e.preventDefault();
-    const email = (document.getElementById("signinEmail") as HTMLInputElement).value;
-    const pw = (document.getElementById("signinPassword") as HTMLInputElement).value;
+    const email = document.getElementById("signinEmail").value;
+    const pw = document.getElementById("signinPassword").value;
 
     console.log("로그인 시도:", { email });
 
@@ -52,10 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("로그인 응답 상태:", res.status);
         return res.json();
       })
-      .then((data: LoginResponse) => {
+      .then((data) => {
         console.log("로그인 응답 데이터:", data);
         alert(data.message);
-        if (data.token && data.name) {
+        if (data.token) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("name", data.name);
           window.location.href = "main.html";
@@ -67,6 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
+  const signUpBtn = document.getElementById("signUp");
+  const signInBtn = document.getElementById("signIn");
+  const container = document.querySelector(".container");
+
   signUpBtn.addEventListener("click", () => {
     container.classList.add("right-panel-active");
   });
@@ -74,4 +70,4 @@ document.addEventListener("DOMContentLoaded", () => {
   signInBtn.addEventListener("click", () => {
     container.classList.remove("right-panel-active");
   });
-}); 
+});
