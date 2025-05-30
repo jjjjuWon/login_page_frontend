@@ -22,6 +22,10 @@
     "allowJs": true,
     "incremental": true,
     "esModuleInterop": true,
+    "types": [
+      "react",
+      "node"
+    ],
     "plugins": [
       {
         "name": "next"
@@ -30,9 +34,11 @@
   },
   "include": [
     "app",
+    "components",
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next"
   ]
 }

@@ -1,29 +1,50 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface LoginFormProps {
   onLogin: (username: string) => void;
 }
 
 export default function LoginForm({ onLogin }: LoginFormProps) {
-  const [username, setUsername] = useState('');77
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 예시용 인증 로직 (id: admin, pw: admin 이면 어드민으로 간주)
-    if (username === 'admin' && password === 'admin') {
-      localStorage.setItem('token', 'admin-token'); // 실제에선 JWT 같은 걸 받아야 함
-      localStorage.setItem('name', '관리자');
-      onLogin('관리자');
-    } else if (username && password) {
-      localStorage.setItem('token', 'user-token'); // 임시 토큰......
-      localStorage.setItem('name', username);
-      onLogin(username);
-    } else {
+    if (!username || !password) {
       alert('아이디와 비밀번호를 입력해주세요.');
+      return;
+    }
+
+    if (username === 'admin' && password === 'admin') {
+      localStorage.setItem('token', 'admin-token');
+      localStorage.setItem('name', '관리자');
+      alert('👑 관리자 로그인 성공!');
+      onLogin('관리자');
+      router.push('/chat');
+    } else {
+      // 회원가입처럼 처리 (임시 토큰 발급)
+      const isNewUser = !localStorage.getItem(`user-${username}`);
+      if (isNewUser) {
+        alert('회원가입 완료! 자동 로그인합니다.');
+        localStorage.setItem(`user-${username}`, password);
+      } else {
+        const storedPw = localStorage.getItem(`user-${username}`);
+        if (storedPw !== password) {
+          alert('비밀번호가 일치하지 않습니다.');
+          return;
+        }
+      }
+
+      localStorage.setItem('token', 'user-token');
+      localStorage.setItem('name', username);
+      alert('로그인 성공!');
+      onLogin(username);
+      router.push('/chat');
     }
   };
 
@@ -63,4 +84,4 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       </button>
     </form>
   );
-} 
+}
