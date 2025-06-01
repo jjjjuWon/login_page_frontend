@@ -247,6 +247,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: #b2c7da; /* KakaoTalk mobile chat background color */
   }
 
   .sidebar {
@@ -254,58 +255,212 @@
   }
 
   .main-content {
-    height: 100vh;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    background-color: #b2c7da; /* Match container background */
+    padding-bottom: 60px; /* Add padding at the bottom to prevent input overlap */
+    overflow-y: hidden; /* Prevent main content from scrolling independently */
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #b2c7da; /* Match background */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: none; /* Remove shadow from header */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle separator */
+  }
+
+  .menuButton {
+    display: block; /* Ensure menu button is visible on mobile */
+    color: #333; /* Darker icon color */
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px 0 0;
   }
 
   .current-room {
     margin: 0;
     border-radius: 0;
-    padding: 15px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    flex-grow: 1;
+    text-align: center;
+    font-size: 17px; /* Slightly smaller font size */
+    font-weight: bold;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .chatBox {
-    height: calc(100vh - 140px);
-    margin: 0;
-    border-radius: 0;
-    background-color: #f5f5f5;
+    flex-grow: 1;
+    padding: 10px 15px;
+    overflow-y: auto; /* Allow chat messages to scroll */
+    background-color: #b2c7da;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Style for chat messages */
+  .message-container {
+    display: flex;
+    margin-bottom: 4px; /* Smaller margin between messages */
+    align-items: flex-start; /* Align items to the top */
+  }
+
+  .message-container.sent {
+    flex-direction: row-reverse;
+  }
+
+  .user-avatar {
+    width: 35px; /* Slightly smaller avatar */
+    height: 35px;
+    border-radius: 50%;
+    background-color: #eee; /* Neutral background for avatar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #555;
+    margin: 0 5px; /* Adjust margin */
+    flex-shrink: 0;
+    font-size: 14px;
   }
 
   .message {
-    max-width: 80%;
+    max-width: 80%; /* Adjust max width */
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
   }
 
   .message.sent {
-    margin-left: auto;
+    align-items: flex-end;
   }
 
   .message.received {
-    margin-right: auto;
+    align-items: flex-start;
+  }
+
+  .message .bubble {
+    border-radius: 12px; /* Adjust border radius */
+    padding: 8px 12px; /* Adjust padding */
+    box-shadow: none; /* Remove shadow */
+    line-height: 1.4;
+    position: relative; /* Needed for the pointy corner */
+  }
+
+  .message.sent .bubble {
+    background-color: #fee500; /* KakaoTalk yellow */
+    margin-left: 8px; /* Space between avatar and bubble */
+    margin-right: 0; /* Reset margin */
+  }
+
+  .message.received .bubble {
+    background-color: white;
+    border: 1px solid #eee;
+    margin-right: 8px; /* Space between avatar and bubble */
+    margin-left: 0; /* Reset margin */
+  }
+
+  /* Pointy corner using pseudo-elements */
+  .message.sent .bubble::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -5px; /* Adjust position */
+    border-top: 6px solid #fee500;
+    border-left: 6px solid transparent;
+    border-right: 0 solid transparent;
+    border-bottom: 0 solid transparent;
+  }
+
+  .message.received .bubble::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -5px; /* Adjust position */
+    border-top: 6px solid white;
+    border-left: 0 solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 0 solid transparent;
+  }
+
+  .message .meta {
+    font-size: 10px; /* Smaller meta font size */
+    color: #555; /* Darker grey */
+    margin: 2px 5px 0 5px; /* Adjust margin */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Smaller gap */
+  }
+
+  .message.sent .meta {
+    justify-content: flex-end; /* Align meta to the right for sent messages */
+  }
+
+  .message.received .meta {
+    justify-content: flex-start; /* Align meta to the left for received messages */
+  }
+
+  .message .meta .time {
+    font-size: 9px; /* Even smaller time font size */
+    color: #888; /* Lighter grey for time */
+  }
+
+  .message .content {
+    font-size: 15px;
+    color: #000;
+    line-height: 1.4;
+    white-space: pre-line;
   }
 
   .formWrapper {
-    position: sticky;
+    position: fixed; /* Fix input at the bottom */
     bottom: 0;
-    background-color: white;
-    padding: 10px;
-    border-top: 1px solid #eee;
+    left: 0;
+    right: 0;
+    background-color: #f9f9f9; /* Lighter input area background */
+    padding: 8px 10px;
+    border-top: 1px solid #ddd;
   }
 
   .inputRow {
     padding: 0;
+    gap: 8px;
+    align-items: center; /* Ensure items are vertically aligned */
   }
 
   .messageInput {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
     font-size: 16px;
-    padding: 12px 15px;
+    background-color: white;
+    outline: none;
+    color: #333;
+  }
+
+  .messageInput::placeholder {
+    color: #bbb;
   }
 
   .sendBtn {
-    padding: 12px 20px;
-    font-size: 14px;
+    padding: 10px 18px;
+    background-color: #fee500;
+    color: #3c1e1e;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
   }
 }
