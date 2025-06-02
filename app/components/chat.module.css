@@ -464,3 +464,9 @@
     white-space: nowrap;
   }
 }
+
+@media (max-width: 767px) {
+  .container {
+    display: none;
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Chat from '../components/Chat';
+import ResponsiveChat from '../components/ResponsiveChat';
 
 export default function ChatPage() {
   const router = useRouter();
@@ -24,5 +24,5 @@ export default function ChatPage() {
     return <div className="p-10 text-gray-500">인증 확인 중...</div>;
   }
 
-  return <Chat username={username} />;
+  return <ResponsiveChat username={username} />;
 }

@@ -14,6 +14,7 @@ interface Message {
   message: string;
   timestamp?: string;
   roomId: string;
+  messageId?: string;
 }
 
 interface Room {
@@ -24,6 +25,7 @@ interface Room {
 
 interface UserData {
   name: string;
+  socketId: string;
 }
 
 export default function Chat({ username }: ChatProps) {
@@ -97,7 +99,8 @@ export default function Chat({ username }: ChatProps) {
         sender: username,
         message: newMessage,
         roomId: currentRoom,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        messageId: `${socket.id}-${Date.now()}`
       };
       socket.emit('send_message', messageData);
       setNewMessage('');
@@ -137,7 +140,7 @@ export default function Chat({ username }: ChatProps) {
           <h3>현재 채팅방 사용자</h3>
           <div>
             {onlineUsers.map(user => (
-              <div key={user.name} className={styles['online-user']}>
+              <div key={user.socketId} className={styles['online-user']}>
                 <div className={styles['user-avatar']}>{user.name.charAt(0).toUpperCase()}</div>
                 {user.name}
               </div>
@@ -149,7 +152,7 @@ export default function Chat({ username }: ChatProps) {
       <div className={styles['main-content']}>
         <div className={styles['current-room']}>현재 채팅방: {currentRoom}</div>
         <div id="chat" className={styles.chatBox}>
-          {messages.map((message, index) => {
+          {messages.map((message) => {
             const isMine = message.sender === username;
             const formattedTime = new Date(message.timestamp!).toLocaleTimeString([], {
               hour: '2-digit',
@@ -159,7 +162,7 @@ export default function Chat({ username }: ChatProps) {
 
             return (
               <div
-                key={index}
+                key={message.messageId}
                 className={`${styles['message-container']} ${isMine ? styles.sent : styles.received}`}
               >
                 <div className={styles['user-avatar']}>
@@ -176,7 +179,7 @@ export default function Chat({ username }: ChatProps) {
             );
           })}
           <div ref={messagesEndRef} />
-      </div>
+        </div>
         <form onSubmit={sendMessage} className={styles.formWrapper}>
           <div className={styles.inputRow}>
             <input
