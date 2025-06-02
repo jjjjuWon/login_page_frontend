@@ -27,7 +27,7 @@ export default function MobileChat({ username }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null);
-  const [currentRoom, setCurrentRoom] = useState('general');
+  const [currentRoom, setCurrentRoom] = useState('General');
   const [rooms, setRooms] = useState<Room[]>([]);
   const [showRoomList, setShowRoomList] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ export default function MobileChat({ username }: ChatProps) {
     newSocket.on('connect', () => {
       console.log('소켓 연결 성공!', newSocket.id);
       newSocket.emit('user_login', { name: username });
-      newSocket.emit('join_room', 'general');
+      newSocket.emit('join_room', 'General');
     });
 
     newSocket.on('connect_error', (err) => {
@@ -168,6 +168,9 @@ export default function MobileChat({ username }: ChatProps) {
           </div>
 
           <form onSubmit={sendMessage} className={styles.inputForm}>
+            <div className={styles.inputIcons}>
+              {/* 여기에 아이콘 버튼들이 들어간다. */}
+            </div>
             <input
               type="text"
               value={newMessage}

@@ -2,86 +2,116 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #b2c7da;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background-color: #fee500;
-  color: #000;
+  padding: 0.5rem 1rem;
+  background-color: #b2c7da;
+  color: #333;
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .menuButton,
 .logoutButton {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.3rem;
+  color: #333;
+  font-weight: normal;
 }
 
 .header h2 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .roomList {
   flex: 1;
   overflow-y: auto;
-  background-color: white;
+  background-color: #b2c7da;
+  padding-top: 0.5rem;
+  padding-bottom: 5rem;
 }
 
 .createRoomButton {
-  width: 100%;
-  padding: 1rem;
+  width: calc(100% - 2rem);
+  margin: 0 1rem 0.8rem 1rem;
+  padding: 0.6rem 0.8rem;
   background-color: #fee500;
   border: none;
   font-weight: bold;
   cursor: pointer;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .roomItem {
   display: flex;
   align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #eee;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
+  background-color: transparent;
+}
+
+.roomItem:last-child {
+  border-bottom: none;
 }
 
 .roomItem.active {
-  background-color: #f8f8f8;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .roomAvatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background-color: #fee500;
+  background-color: #eee;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 1rem;
+  margin-right: 0.6rem;
   font-weight: bold;
+  color: #555;
+  font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
 .roomInfo {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .roomName {
   display: block;
   font-weight: bold;
+  font-size: 0.95rem;
+  color: #333;
 }
 
 .userCount {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #666;
+}
+
+#userList {
+  display: none;
 }
 
 .chatBox {
@@ -90,6 +120,8 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  background-color: #b2c7da;
+  padding-bottom: 5rem;
 }
 
 .messageContainer {
@@ -151,31 +183,51 @@
   all: unset;
   display: flex;
   padding: 0.4rem 0.8rem;
-  background-color: white;
-  border-top: 1px solid #eee;
+  background-color: #f2f2f2;
+  border-top: 1px solid #ddd;
+  position: sticky;
+  bottom: 0;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 0.5rem;
+}
+
+.inputIcons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
 }
 
 .messageInput {
   flex: 1;
   padding: 0.4rem 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 1.2rem;
+
   font-size: 0.9rem;
-  height: 40px;
-  line-height: 1;
-  margin: 0;
+  min-height: 40px;
+  height: auto;
+  max-width: none;
+  width: auto;
   box-sizing: border-box;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  background-color: white;
+  margin: 0;
 }
 
 .sendButton {
-  padding: 0.2rem 1.5rem;
+  padding: 0.4rem 1rem;
   background-color: #fee500;
   border: none;
-  border-radius: 1.5rem;
+  border-radius: 0.5rem;
   font-weight: bold;
   cursor: pointer;
   flex-shrink: 0;
+  outline: none;
 }
 
 @media (min-width: 768px) {
